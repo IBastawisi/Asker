@@ -1,3 +1,4 @@
+using Asker.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -22,6 +23,9 @@ namespace Asker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AskerDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IQuestionRepo, QuestionRepo>();
+            services.AddScoped<IAnswerRepo, AnswerRepo>();
 
             services.AddControllersWithViews();
 
