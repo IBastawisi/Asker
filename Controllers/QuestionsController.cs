@@ -51,6 +51,7 @@ namespace Asker.Controllers
             return question;
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<Question>> PutQuestion(Guid id, QuestionPutRequest questionPutRequest)
         {
@@ -59,28 +60,38 @@ namespace Asker.Controllers
             {
                 return NotFound();
             }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userId != question.UserId)
+            {
+                return Forbid();
+            }
+
             question.Title = string.IsNullOrEmpty(questionPutRequest.Title) ? question.Title : questionPutRequest.Title;
             question.Content = string.IsNullOrEmpty(questionPutRequest.Content) ? question.Content : questionPutRequest.Content;
 
             return await _questionRepository.PutQuestion(id, question);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(QuestionPostRequest questionPostRequest)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userName = string.IsNullOrEmpty(questionPostRequest.UserName) ? "Anonymous" : questionPostRequest.UserName;
+
             var savedQuestion = await _questionRepository.PostQuestion(new Question
             {
                 Title = questionPostRequest.Title,
                 Content = questionPostRequest.Content,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                UserName = "admin",
+                UserId = userId,
+                UserName = userName,
                 Created = DateTime.UtcNow
             });
             return CreatedAtAction("GetQuestion", new { id = savedQuestion.QuestionId }, savedQuestion);
 
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(Guid id)
         {
@@ -89,7 +100,11 @@ namespace Asker.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userId != question.UserId)
+            {
+                return Forbid();
+            }
             await _questionRepository.DeleteQuestion(question);
 
             return NoContent();
@@ -104,12 +119,16 @@ namespace Asker.Controllers
             {
                 return NotFound();
             }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userName = string.IsNullOrEmpty(answerPostRequest.UserName) ? "Anonymous" : answerPostRequest.UserName;
+
             var savedAnswer = await _answerRepository.PostAnswer(new Answer
             {
                 QuestionId = answerPostRequest.QuestionId,
                 Content = answerPostRequest.Content,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                UserName = "admin",
+                UserId = userId,
+                UserName = userName,
                 Created = DateTime.UtcNow
             });
 

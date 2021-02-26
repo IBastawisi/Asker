@@ -19,6 +19,7 @@ namespace Asker.Models
     {
         [Required]
         public Guid QuestionId { get; set; }
+        public string UserName { get; set; }
         [Required]
         public string Content { get; set; }
     }
