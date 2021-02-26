@@ -11,6 +11,6 @@ namespace Asker.Repositories
         Task<Answer> GetAnswer(Guid answerId);
         Task<IEnumerable<Answer>> GetAnswersByUserId(string userId);
         Task<Answer> PostAnswer(Answer answer);
-
+        Task<IEnumerable<Answer>> GetAnswersByQuestionId(Guid questionId);
     }
 }

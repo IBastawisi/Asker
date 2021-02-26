@@ -26,6 +26,11 @@ namespace Asker.Repositories
             return await context.Answers.Where(x => x.UserId == userId).ToListAsync();
         }
 
+        public async Task<IEnumerable<Answer>> GetAnswersByQuestionId(Guid questionId)
+        {
+            return await context.Answers.Where(x => x.QuestionId == questionId).ToListAsync();
+        }
+
         public async Task<Answer> PostAnswer(Answer answer)
         {
             context.Add(answer);

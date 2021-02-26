@@ -26,8 +26,8 @@ namespace Asker.Models
 
     public class QuestionPostRequest
     {
-        [Required]
         public string UserName { get; set; }
+        [Required]
         public string Title { get; set; }
         public string Content { get; set; }
     }

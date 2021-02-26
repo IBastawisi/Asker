@@ -110,6 +110,14 @@ namespace Asker.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/answers")]
+        public async Task<IEnumerable<Answer>> GetAnswers(Guid id)
+        {
+            var answers = await _answerRepository.GetAnswersByQuestionId(id);
+
+            return answers;
+        }
+
         [Authorize]
         [HttpPost("answer")]
         public async Task<ActionResult<Answer>> PostAnswer(AnswerPostRequest answerPostRequest)
