@@ -1,0 +1,11 @@
+version: "3"
+services:
+  web:
+    container_name: asker-dotnet
+    build: .
+    volumes:
+      - datastore:/app/DataStore
+    ports:
+      - 5000:80
+volumes:
+  datastore:

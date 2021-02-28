@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace Asker
 {
@@ -23,6 +24,12 @@ namespace Asker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+                     
+            if (!Directory.Exists("DataStore"))
+            {
+                Directory.CreateDirectory("DataStore");
+            }
+
             services.AddDbContext<AskerDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IQuestionRepo, QuestionRepo>();

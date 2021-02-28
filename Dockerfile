@@ -7,7 +7,7 @@ COPY ["Asker.csproj", ""]
 RUN dotnet restore "./Asker.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN apt update && apt install nodejs -y && apt install npm -y
+RUN apt-get update && apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_15.x | bash - && apt-get install -y nodejs
 RUN dotnet build "Asker.csproj" -c Release -o /app/build
 
 FROM build AS publish
